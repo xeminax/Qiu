@@ -8,13 +8,4 @@
 /captures
 .externalNativeBuild
 
-app/libs/
-app/src/androidTest/
-app/src/test/
-build.gradle
-gradle.properties
-gradle/
-gradlew
-gradlew.bat
-projectFilesBackup/
-settings.gradle
+
