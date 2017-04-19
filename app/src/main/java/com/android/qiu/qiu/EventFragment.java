@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.qiu.model.Event;
@@ -27,6 +28,9 @@ public class EventFragment extends Fragment {
     private TextView mTitleField;
     private TextView mDateField;
     private TextView mTimeField;
+    private ImageView mImageView1;
+    private TextView mPlaceField;
+
 
 
     public static EventFragment newInstance(UUID eventId){
@@ -60,6 +64,12 @@ public class EventFragment extends Fragment {
         mDateField.setText(mEvent.getDate().toString());
 
         mTimeField = (TextView)v.findViewById(R.id.event_time);
+
+        mPlaceField = (TextView)v.findViewById(R.id.event_place);
+
+
+        mImageView1 = (ImageView)v.findViewById(R.id.imageView2);
+
 
         return v;
     }

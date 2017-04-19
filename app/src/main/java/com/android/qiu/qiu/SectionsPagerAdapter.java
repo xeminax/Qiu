@@ -46,11 +46,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "star";
+                return "我关注的";
             case 1:
-                return "fire";
+                return "热门活动";
             case 2:
-                return "map";
+                return "附近活动";
         }
         return null;
     }

@@ -62,11 +62,11 @@
 
         <ImageView
             android:id="@+id/list_item_event_image_view"
-            android:layout_below="@+id/list_item_event_content_view"
+            android:layout_width="wrap_content"
 
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            card_view:srcCompat="@android:drawable/screen_background_dark_transparent"/>
+            android:layout_below="@+id/list_item_event_content_view"
+            card_view:srcCompat="@drawable/add_image"/>
 
 
     </RelativeLayout>

@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,9 +19,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.app.FragmentManager;
+import android.widget.Button;
 
 import com.android.qiu.model.Event;
 import com.android.qiu.model.EventLab;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.SaveCallback;
 
 
 public class EventListActivity extends AppCompatActivity
@@ -28,14 +33,21 @@ public class EventListActivity extends AppCompatActivity
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private Button mloginButton;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
 
 
@@ -71,7 +83,27 @@ public class EventListActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
+
+
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        mloginButton = (Button) headerView.findViewById(R.id.login) ;
+        mloginButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent i = new Intent(EventListActivity.this,LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
+
+
+
+
+
+
 
     }
  /* private void setDefaultFragment(){
@@ -104,6 +136,7 @@ public class EventListActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+
     }
 
     @Override
@@ -127,8 +160,9 @@ public class EventListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_manage) {
-            // Handle the camera action
+        if (id == R.id.login) {
+
+
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

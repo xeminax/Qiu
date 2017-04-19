@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
 
-        <item android:title="消息"
-              android:id="@+id/menu_item_message"
-              android:icon="@android:drawable/ic_dialog_email"
-              android:showAsAction="never"/>
-        <item android:title="我关注的群组"
-              android:id="@+id/menu_item_mysubs"
-              android:icon="@android:drawable/btn_star_big_off"
-              android:showAsAction="never"/>
+        <item
+            android:id="@+id/menu_item_discovery"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:showAsAction="never"
+            android:title="发现群组"/>
+        <item
+            android:id="@+id/menu_item_message"
+            android:icon="@drawable/ic_memu_message"
+            android:showAsAction="never"
+            android:title="消息"/>
+        <item
+            android:id="@+id/menu_item_mysubs"
+            android:icon="@drawable/ic_menu_mysubs"
+            android:showAsAction="never"
+            android:title="我关注的群组"/>
+        <item
+            android:id="@+id/menu_item_mypost"
+            android:icon="@drawable/ic_menu_mypost"
+            android:showAsAction="never"
+            android:title="我发布的"/>
+        <item
+            android:id="@+id/menu_item_myattend"
+            android:icon="@drawable/ic_menu_attend"
+            android:showAsAction="never"
+            android:title="我参与的"
+            />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="其他">
         <menu>
             <item
                 android:id="@+id/nav_manage"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Tools"/>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
+                android:title="设置"/>
+
         </menu>
     </item>
 
