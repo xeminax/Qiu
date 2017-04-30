@@ -29,5 +29,7 @@
     <string name="title_activity_tab_demo">TabDemo</string>
 
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="date_picker_title">Date of event</string>
+
 
 </resources>

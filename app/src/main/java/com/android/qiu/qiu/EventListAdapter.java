@@ -44,6 +44,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
             mPlaceTextView.setText(mEvent.getPlace());
             mDateTextView.setText(mEvent.getDate().toString());
             mContentTextView.setText(mEvent.getContent());
+            mImageView.setImageBitmap(mEvent.getPicture());
         }
 
 
@@ -52,14 +53,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         mEvents = events;
     }
     @Override
-    public EventListAdapter.EventHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public EventHolder onCreateViewHolder(ViewGroup parent, int viewType){
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.list_item_event,parent,false);
-        return new EventListAdapter.EventHolder(view);
+        return new EventHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(EventListAdapter.EventHolder holder, int position){
+    public void onBindViewHolder(EventHolder holder, int position){
         Event event = mEvents.get(position);
         holder.bindEvent(event);
 

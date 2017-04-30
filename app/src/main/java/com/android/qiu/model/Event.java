@@ -1,5 +1,6 @@
 package com.android.qiu.model;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import java.util.Date;
@@ -15,7 +16,7 @@ public class Event {
     private Date mDate;
     private String mPlace;
     private String mContent;
-    private ImageView mImageView;
+    private Bitmap picture;
     public  Event(){
         mId = UUID.randomUUID();
         mDate = new Date();
@@ -53,12 +54,12 @@ public class Event {
         mContent = content;
     }
 
-    public ImageView getImageView() {
-        return mImageView;
+    public Bitmap getPicture() {
+        return picture;
     }
 
-    public void setImageView(ImageView imageView) {
-        mImageView = imageView;
+    public void setPicture(Bitmap picture) {
+        this.picture = picture;
     }
 
     public String getTitle() {

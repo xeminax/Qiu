@@ -29,32 +29,13 @@
         android:singleLine="true"/>
 
 
-    <DatePicker
-        android:id="@+id/datePicker"
-
+    <Button
+        android:id="@+id/new_event_add_date"
         android:layout_width="match_parent"
-        android:layout_height="133dp"
-        android:layout_gravity="center"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        android:theme="@android:style/Widget.Holo.DatePicker"/>
+        android:layout_height="wrap_content"
+        android:text="设置时间"/>
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="133dp"
-        android:layout_gravity="center"
-
-
-        android:layout_toRightOf="@id/datePicker"
-        android:fadeScrollbars="true"
-        android:minHeight="3dp"
-        android:minWidth="3dp"
-        android:outlineProvider="none"
-        android:scrollbarSize="3dp"
-        android:timePickerMode="spinner"/>
-
-<RelativeLayout
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
