@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.android.qiu.model.Event;
 import com.android.qiu.model.EventLab;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 
 import java.util.List;
 
@@ -23,7 +26,10 @@ import java.util.List;
 public class NearEventListFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "sectionNumber";
     private RecyclerView mEventRecyclerView;
-    private NearEventListFragment.EventAdapter mEventAdapter;
+    private EventAdapter mEventAdapter;
+
+    private MaterialRefreshLayout mMaterialRefreshLayout;
+    private List<Event> events;
 
     public static NearEventListFragment newInstance(int sectionNumber) {
         NearEventListFragment fragment = new NearEventListFragment();
@@ -36,12 +42,43 @@ public class NearEventListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_near_list, container, false);
         mEventRecyclerView = (RecyclerView) view.findViewById(R.id.event_near_recycler_view);
+        mMaterialRefreshLayout = (MaterialRefreshLayout) view.findViewById(R.id.refresh);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        EventLab eventLab = EventLab.get(getActivity());
-        List<Event> events = eventLab.getEvents();
-        mEventAdapter = new NearEventListFragment.EventAdapter(events);
-        mEventRecyclerView.setAdapter(mEventAdapter);
+        mMaterialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                //get data from could
+                initData();
+                mMaterialRefreshLayout.finishRefresh();
+                Log.v("Test","onRefresh------------");
+
+            }
+
+            @Override
+            public void onRefreshLoadMore(final MaterialRefreshLayout materialRefreshLayout) {
+
+                Log.v("Test","onRefreshLoadMore------------");
+                EventLab eventLab = EventLab.get(getActivity());
+                events = eventLab.getEventsALLFromLean();
+                //events.addAll(eventLab.moreEvents(events.size()));
+                mEventAdapter.notifyDataSetChanged();
+                materialRefreshLayout.finishRefreshLoadMore();
+            }
+
+
+        });
+
+        //  updateUI();
+        initData();
         return view;
+    }
+
+
+    private void initData() {
+        EventLab eventLab = EventLab.get(getActivity());
+        events = eventLab.getEventsALLFromLean();
+        mEventAdapter = new EventAdapter(events);
+        mEventRecyclerView.setAdapter(mEventAdapter);
     }
 
 
@@ -81,7 +118,7 @@ public class NearEventListFragment extends Fragment {
     }
 
 
-    private class EventAdapter extends RecyclerView.Adapter<NearEventListFragment.EventHolder> {
+    private class EventAdapter extends RecyclerView.Adapter<EventHolder> {
         private List<Event> mEvents;
 
         public EventAdapter(List<Event> events) {
@@ -89,14 +126,14 @@ public class NearEventListFragment extends Fragment {
         }
 
         @Override
-        public NearEventListFragment.EventHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public EventHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.list_item_event, parent, false);
-            return new NearEventListFragment.EventHolder(view);
+            return new EventHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(NearEventListFragment.EventHolder holder, int position) {
+        public void onBindViewHolder(EventHolder holder, int position) {
             Event event = mEvents.get(position);
             holder.bindEvent(event);
         }

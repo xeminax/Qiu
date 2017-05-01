@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.android.qiu.model.Event;
 import com.android.qiu.model.EventLab;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 
 import java.util.List;
 
@@ -25,6 +28,10 @@ public class MyEventListFragment extends Fragment {
 
     private RecyclerView mEventRecyclerView;
     private EventAdapter mEventAdapter;
+
+    private MaterialRefreshLayout mMaterialRefreshLayout;
+    private List<Event> events;
+
 
 
     public static MyEventListFragment newInstance(int sectionNumber) {
@@ -41,17 +48,50 @@ public class MyEventListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_myevent_list, container, false);
         mEventRecyclerView = (RecyclerView) view.findViewById(R.id.event_recycler_view);
+        mMaterialRefreshLayout = (MaterialRefreshLayout) view.findViewById(R.id.refresh);
+
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            EventLab eventLab = EventLab.get(getActivity());
-        List<Event> events = eventLab.getEvents();
-        mEventAdapter = new EventAdapter(events);
-        mEventRecyclerView.setAdapter(mEventAdapter);
 
 
-      //  updateUI();
+
+        mMaterialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
+                //get data from could
+                initData();
+                mMaterialRefreshLayout.finishRefresh();
+                Log.v("Test","onRefresh------------");
+
+            }
+
+            @Override
+            public void onRefreshLoadMore(final MaterialRefreshLayout materialRefreshLayout) {
+
+                Log.v("Test","onRefreshLoadMore------------");
+                EventLab eventLab = EventLab.get(getActivity());
+                events = eventLab.getEventsALLFromLean();
+                //events.addAll(eventLab.moreEvents(events.size()));
+                mEventAdapter.notifyDataSetChanged();
+                materialRefreshLayout.finishRefreshLoadMore();
+            }
+
+
+        });
+
+        //  updateUI();
+        initData();
         return view;
     }
- /*   @Override
+
+
+    private void initData() {
+            EventLab eventLab = EventLab.get(getActivity());
+            events = eventLab.getEventsALLFromLean();
+            mEventAdapter = new EventAdapter(events);
+            mEventRecyclerView.setAdapter(mEventAdapter);
+    }
+
+  /* @Override
     public void onResume(){
         super.onResume();
         updateUI();
@@ -59,13 +99,14 @@ public class MyEventListFragment extends Fragment {
 
     private void updateUI() {
         EventLab eventLab = EventLab.get(getActivity());
-        List<Event> events = eventLab.getEvents();
-     if (mEventAdapter == null){   mEventAdapter = new EventAdapter(events);
-        mEventRecyclerView.setAdapter(mEventAdapter);}
-        else {
-         mEventAdapter.notifyDataSetChanged();
-     } */
-
+        List<Event> events = eventLab.getEventsALLFromLean();
+        if (mEventAdapter == null) {
+            mEventAdapter = new EventListAdapter(events);
+            mEventRecyclerView.setAdapter(mEventAdapter);
+        } else {
+            mEventAdapter.notifyDataSetChanged();
+        }
+    }*/
         private class EventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             private TextView mTitleTextView;
             private Event mEvent;

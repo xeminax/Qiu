@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
-public class GroupListActivity extends AppCompatActivity {
+public class GroupKindListActivity extends AppCompatActivity {
     private String[] mListStr = {"体育","音乐","艺术","娱乐","书籍","饮食","科技","旅行","其他"};
     ListView mGroupListView ;
 

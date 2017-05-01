@@ -1,11 +1,15 @@
 package com.android.qiu.model;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
+import com.android.qiu.qiu.R;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
@@ -25,6 +29,7 @@ public class EventLab {
 
     private static EventLab sEventLab;
     private List<Event> mEvents;
+    private Bitmap image;
     public static EventLab get(Context context){
         if(sEventLab == null){
             sEventLab = new EventLab(context);
@@ -44,11 +49,11 @@ public class EventLab {
         mEvents = getEventsALLFromLean();
 
     }
-    public List<Event> getEvents(){
+    /*public List<Event> getEvents(){
 
         return mEvents;
 
-    }
+    }*/
 
     public Event getEvent(UUID id){
         for (Event event:mEvents){
@@ -62,9 +67,8 @@ public class EventLab {
         mEvents.add(event);
     }
 
-    private List<Event> getEventsALLFromLean(){
-        final ArrayList<Event> Events = new ArrayList<Event>();
-        final ArrayList<AVObject> mList = new ArrayList<>();
+    public List<Event> getEventsALLFromLean(){
+        final ArrayList<Event> events = new ArrayList<Event>();
         AVQuery<AVObject> avQuery = new AVQuery<>("Activity");
         avQuery.orderByDescending("createdAt");
         avQuery.findInBackground(new FindCallback<AVObject>() {
@@ -74,7 +78,7 @@ public class EventLab {
                     //int count = 1;
                     for(AVObject activity :  list){
                         //byte[] bytes = null;
-                        final Bitmap[] image = {null};
+                        image = null;
                         Event event = new Event();
                         event.setTitle(activity.getString("title"));
                         //++count;
@@ -87,7 +91,12 @@ public class EventLab {
                             @Override
                             public void done(byte[] bytes, AVException e) {
                                 // bytes 就是文件的数据流
-                                image[0] = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                if(bytes.length!=0){
+                                    image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                }
+                                else{
+                                    image = null;
+                                }
 
                             }
                         }, new ProgressCallback() {
@@ -96,15 +105,62 @@ public class EventLab {
                                 // 下载进度数据，integer 介于 0 和 100。
                             }
                         });
-                        event.setPicture(image[0]);
-                        Events.add(event);
+                        event.setPicture(image);
+
+                        events.add(event);
                     }
                 } else {
                     e.printStackTrace();
                 }
             }
         });
-        return Events;
+        return events;
+    }
+
+    public List<Event> getNearEvents (AVGeoPoint point){
+        //final List<Event> events = new ArrayList<>();
+        final List<Event> events = null;
+        AVQuery<AVObject> query = new AVQuery<>("Activity");
+        query.limit(10);
+        query.whereNear("whereCreated",point);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                //List<AVObject> nearbyTodos = list;// 离这个位置最近的 10 个 Todo 对象
+                for(AVObject activity : list){
+                    image = null;
+                    Event event = new Event();
+                    event.setTitle(activity.getString("title"));
+                    event.setPlace(activity.getString("location_string"));
+                    event.setContent(activity.getString("description"));
+                    //bytes =  activity.getAVFile("image").getData();
+                    AVFile avFile = activity.getAVFile("image");
+                    avFile.getDataInBackground(new GetDataCallback(){
+                        @Override
+                        public void done(byte[] bytes, AVException e) {
+                            // bytes 就是文件的数据流
+                            if(bytes.length!=0){
+                                image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            }
+                            else{
+                                image = null;
+                            }
+
+                        }
+                    }, new ProgressCallback() {
+                        @Override
+                        public void done(Integer integer) {
+                            // 下载进度数据，integer 介于 0 和 100。
+                        }
+                    });
+                    event.setPicture(image);
+
+                    events.add(event);
+                }
+            }
+        });
+
+        return  events;
     }
 
 
