@@ -34,9 +34,13 @@ public class GroupKindListFragment extends Fragment {
             mGroupNameTextView = (TextView) itemView;
         }
     }
-   /* private class GroupListAdapter extends RecyclerView.Adapter<GroupListHolder>{
+  /*  private class GroupListAdapter extends RecyclerView.Adapter<GroupListHolder>{
         private List<GroupList> mGroupKindList;
+        public GroupListAdapter(List<GroupList> groupLists){
+            mGroupKindList = groupLists;
+
+        }
 
     }
-    */
+*/
 }
