@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.qiu.model.Event;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVGeoPoint;
@@ -38,6 +39,7 @@ import java.util.Date;
 public class AddEventFragment extends Fragment {
     private static final String DIALOG_DATE="DialogDate";
     private static final int REQUEST_DATE = 0;  //日期目标
+    private static final String DIALOG_GROUP="SelectGroup";
 
 
 
@@ -52,7 +54,9 @@ public class AddEventFragment extends Fragment {
     private EditText mContentEditText;
     private ImageView mImageView;
     private Button mPublishButton;
-    private Date mDate;
+    private Date mDate = new Date();
+    private TextView mSelectGroup;
+
 
     private AVGeoPoint point;
 
@@ -69,9 +73,18 @@ public class AddEventFragment extends Fragment {
         mContentEditText = (EditText) view.findViewById(R.id.editText3);
         mImageView = (ImageView) view.findViewById(R.id.event_add_Image);
         mPublishButton = (Button) view.findViewById(R.id.button);
+        mSelectGroup = (TextView) view.findViewById(R.id.event_add_group_name);
+
 
        // mDate = (String) DateFormat.format("EEEE,MMM, dd,yyyy",mevent.getDate());
-
+        mSelectGroup.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                FragmentManager manager = getFragmentManager();
+                GroupPickerFragment dialog = new GroupPickerFragment();
+                dialog.show(manager,DIALOG_GROUP);
+            }
+        });
 
         mDateEditButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -103,14 +116,14 @@ public class AddEventFragment extends Fragment {
                     Toast.makeText(getActivity(), "请输入标题", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if ("".equals(mTimeEditButton.getText().toString())) {
+                /*if ("".equals(mTimeEditButton.getText().toString())) {
                     Toast.makeText(getActivity(), "请输入时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if ("".equals(mDateEditButton.getText().toString())) {
                     Toast.makeText(getActivity(), "请输入日期", Toast.LENGTH_SHORT).show();
                     return;
-                }
+                }*/
                 if ("".equals(mLocEditText.getText().toString())) {
                     Toast.makeText(getActivity(), "请输入位置信息", Toast.LENGTH_SHORT).show();
                     return;
@@ -124,8 +137,29 @@ public class AddEventFragment extends Fragment {
                     return;
                 }
 
-
-                AVObject product = new AVObject("Activity");
+                Event activity = new Event();
+                activity.setOwner(AVUser.getCurrentUser());
+                activity.setJoiner_num(0);
+                activity.setTitle(mTopicEditText.getText().toString());
+                activity.setContent(mContentEditText.getText().toString());
+                activity.setPlace(mLocEditText.getText().toString());
+                activity.setPoint(point);
+                activity.setDate(mDate);
+                activity.setImage(new AVFile("activityPic", mImageBytes));
+                activity.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(AVException e) {
+                        if (e == null) {
+                            getActivity().finish();
+                            Toast.makeText(getActivity(), "恭喜你，活动发布成功！", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), "活动发布失败，请检查网络", Toast.LENGTH_SHORT).show();
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                });
+                /*AVObject product = new AVObject("Activity");
                 product.put("title", mTopicEditText.getText().toString());
                 product.put("description", mContentEditText.getText().toString());
                 product.put("location_coordinate", point);//test data
@@ -139,11 +173,12 @@ public class AddEventFragment extends Fragment {
                             getActivity().finish();
                             Toast.makeText(getActivity(), "恭喜你，活动发布成功！", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                            System.out.println(e.getMessage());
+                            //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "活动发布失败，请检查网络", Toast.LENGTH_SHORT).show();
+                            //System.out.println(e.getMessage());
                         }
                     }
-                });
+                });*/
 
 
             }

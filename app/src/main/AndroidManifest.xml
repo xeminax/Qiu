@@ -61,21 +61,20 @@
 
 
         <!-- 反馈组件（需要加入以下声明）START -->
-        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity">
-        </activity>
+        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity"/>
         <!-- 反馈组件 END -->
         <activity
             android:name=".GroupKindListActivity"
-            android:parentActivityName=".EventListActivity">
-        </activity>
+            android:parentActivityName=".EventListActivity"
+            android:label="群组类别"
+            />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
-        </activity>
-        <activity android:name=".MessageActivity">
-        </activity>
-        <activity android:name=".UserinfoActivity">
-        </activity>
+            android:label="登陆"/>
+        <activity android:name=".MessageActivity"/>
+        <activity android:name=".UserinfoActivity"
+                  android:label="个人资料"
+            />
         <activity
             android:name=".EventListActivity"
             android:label="@string/title_activity_main"
@@ -89,29 +88,59 @@
         <activity
             android:name=".EventActivity"
             android:label="活动"
-            android:parentActivityName=".EventListActivity">
-        </activity>
+            android:parentActivityName=".EventListActivity"/>
         <activity
             android:name=".GroupActivity"
-            android:parentActivityName=".EventListActivity">
-        </activity>
-        <activity android:name=".AddGroupActivity">
-        </activity>
-        <activity android:name=".SignUpActivity">
-        </activity>
+            android:parentActivityName=".GroupListActivity"
+            />
+        <activity android:name=".AddGroupActivity"/>
+        <activity android:name=".SignUpActivity"/>
         <activity
             android:name=".AddEventActivity"
             android:label="发布新活动"
-            android:parentActivityName=".EventListActivity">
-        </activity>
+            android:parentActivityName=".EventListActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".EventListActivity"/>
+            android:parentActivityName=".EventListActivity"
+            android:label="注册"
+            />
         <activity
             android:name=".SelectMapActivity"
-            android:parentActivityName=".AddEventActivity"/>
-        <activity android:name=".MyFollowGroupActivity">
+            android:parentActivityName=".AddEventActivity"
+            android:label="选择地点"
+            />
+        <activity
+            android:name=".MyFollowGroupActivity"
+            android:parentActivityName=".EventListActivity"
+            android:label="我关注的群组"
+            />
+        <activity
+            android:name=".GroupListActivity"
+            android:parentActivityName=".GroupKindListActivity"
+            android:label="群组列表"
+            />
+        <activity
+            android:name=".ChatActivity"
+            android:parentActivityName=".EventListActivity"
+            android:label="消息"
+            />
+        <activity
+            android:name=".MyPostEventActivity"
+            android:parentActivityName=".EventListActivity"
+            android:label="我发布的活动"
+            />
+        <activity
+            android:name=".MyAttendEventActivity"
+            android:parentActivityName=".EventListActivity"
+            android:label="我发布的活动"
+            >
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings">
+        </activity>
+
     </application>
 
 </manifest>

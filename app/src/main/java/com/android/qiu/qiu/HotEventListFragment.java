@@ -14,9 +14,15 @@ import android.widget.TextView;
 
 import com.android.qiu.model.Event;
 import com.android.qiu.model.EventLab;
+import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,10 +32,11 @@ import java.util.List;
 public class HotEventListFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "sectionNumber";
     private RecyclerView mEventRecyclerView;
-    private EventAdapter mEventAdapter;
+    private EventListAdapter mEventAdapter;
+
 
     private MaterialRefreshLayout mMaterialRefreshLayout;
-    private List<Event> events;
+    private List<Event> events = new ArrayList<>();
 
     public static HotEventListFragment newInstance(int sectionNumber) {
         HotEventListFragment fragment = new HotEventListFragment();
@@ -45,12 +52,19 @@ public class HotEventListFragment extends Fragment {
         mEventRecyclerView = (RecyclerView) view.findViewById(R.id.event_hot_recycler_view);
         mMaterialRefreshLayout = (MaterialRefreshLayout) view.findViewById(R.id.refresh);
         mEventRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mEventAdapter = new EventListAdapter(events,getActivity());
+        mEventRecyclerView.setAdapter(mEventAdapter);
+
+        //initData();
+        //System.out.println(events.size()+" Hot onCreate");
         mMaterialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(final MaterialRefreshLayout materialRefreshLayout) {
                 //get data from could
                 initData();
+                //System.out.println(events.size()+" Hot onRefresh");
                 mMaterialRefreshLayout.finishRefresh();
+                //mEventAdapter.notifyDataSetChanged();
                 Log.v("Test","onRefresh------------");
 
             }
@@ -59,90 +73,74 @@ public class HotEventListFragment extends Fragment {
             public void onRefreshLoadMore(final MaterialRefreshLayout materialRefreshLayout) {
 
                 Log.v("Test","onRefreshLoadMore------------");
-                EventLab eventLab = EventLab.get(getActivity());
+                /*EventLab eventLab = EventLab.get(getActivity());
                 events = eventLab.getEventsALLFromLean();
                 //events.addAll(eventLab.moreEvents(events.size()));
-                mEventAdapter.notifyDataSetChanged();
+                System.out.println(events.size()+" Hot onRefreshLoadMore");*/
+                //mEventAdapter.notifyDataSetChanged();
+                //initData();
+                loadMore(events.size());
                 materialRefreshLayout.finishRefreshLoadMore();
             }
 
 
         });
 
-        //  updateUI();
-        initData();
         return view;
     }
 
 
     private void initData() {
-        EventLab eventLab = EventLab.get(getActivity());
-        events = eventLab.getEventsALLFromLean();
-        mEventAdapter = new EventAdapter(events);
-        mEventRecyclerView.setAdapter(mEventAdapter);
+        events.clear();
+       /* EventLab eventLab = EventLab.get(getActivity());
+        events = eventLab.getEventsALLFromLean();*/
+        AVQuery<Event> avQuery = AVObject.getQuery(Event.class);
+        avQuery.orderByDescending("joiner_num");
+        avQuery.limit(10);
+        avQuery.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> list, AVException e) {
+                if (e == null) {
+                    events.addAll(list);
+                    mEventAdapter.notifyDataSetChanged();
+                    //System.out.println(list.size()+" f");
+                } else {
+                    e.printStackTrace();
+                }
+                //System.out.println(events.size()+" f2");
+            }
+        });
     }
 
-
-
-
-    private class EventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mTitleTextView;
-        private Event mEvent;
-        private TextView mDateTextView;
-        private TextView mPlaceTextView;
-        private TextView mContentTextView;
-        private ImageView mImageView;
-
-        public EventHolder(View itemView) {
-            super(itemView);
-            itemView.setOnClickListener(this);
-            mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_event_title_view);
-            mDateTextView = (TextView) itemView.findViewById(R.id.list_item_event_date_view);
-            mPlaceTextView = (TextView) itemView.findViewById(R.id.list_item_event_place_view);
-            mContentTextView = (TextView) itemView.findViewById(R.id.list_item_event_content_view);
-            mImageView = (ImageView) itemView.findViewById(R.id.list_item_event_image_view);
-        }
-
-        public void bindEvent(Event event) {
-            mEvent = event;
-            mTitleTextView.setText(mEvent.getTitle());
-            mPlaceTextView.setText(mEvent.getPlace());
-            mDateTextView.setText(mEvent.getDate().toString());
-            mContentTextView.setText(mEvent.getContent());
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = EventActivity.newIntent(getActivity(), mEvent.getId());
-            startActivity(intent);
-        }
-
+    private void loadMore(int size){
+        AVQuery<Event> avQuery = AVObject.getQuery(Event.class);
+        avQuery.orderByDescending("createdAt");
+        avQuery.limit(10);
+        avQuery.skip(size);
+        avQuery.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> list, AVException e) {
+                if (e == null) {
+                    events.addAll(list);
+                    mEventAdapter.notifyDataSetChanged();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
-
-    private class EventAdapter extends RecyclerView.Adapter<EventHolder> {
-        private List<Event> mEvents;
-
-        public EventAdapter(List<Event> events) {
-            mEvents = events;
-        }
-
-        @Override
-        public EventHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.list_item_event, parent, false);
-            return new EventHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(EventHolder holder, int position) {
-            Event event = mEvents.get(position);
-            holder.bindEvent(event);
-        }
-        @Override
-        public  int getItemCount(){
-            return mEvents.size();
-        }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        AVAnalytics.onResume(getActivity());
+        initData();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AVAnalytics.onPause(getActivity());
+    }
+
 }

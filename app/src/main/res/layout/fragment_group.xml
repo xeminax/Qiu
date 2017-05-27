@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/group_detial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:text="群组简介："
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"/>
+
+    <TextView
+        android:id="@+id/group_content"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/group_detial"
+
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:text="自行车爱好者的聚集地"
+        android:textAllCaps="false"/>
+
+
+
+
+    <com.cjj.MaterialRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/group_content"
+        app:isLoadMore="true">
+
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                                                android:id="@+id/group_event_recycler_view"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+
+
+                                                android:clipToPadding="false"/>
+
+    </com.cjj.MaterialRefreshLayout>
+</RelativeLayout>

@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/event_detail"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,16 +20,61 @@
         android:orientation="vertical"
         android:weightSum="1">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/event_group_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                app:srcCompat="@drawable/smile"/>
+
+            <TextView
+                android:id="@+id/event_detail_group_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/event_group_image"
+                android:paddingBottom="16dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="16dp"
+
+                android:text="自行车"
+
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="246dp"
+                android:layout_marginTop="16dp"
+                android:layout_toRightOf="@+id/event_group_image"
+                android:background="@drawable/follow_selector"
+                android:clickable="true"/>
+        </RelativeLayout>
+
+
         <TextView
             android:id="@+id/event_title"
+            style="?android:listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingTop="10dp"
+            android:layout_marginLeft="16dp"
+            android:paddingBottom="8dp"
 
 
-            android:textSize="26sp"
+            android:paddingTop="8dp"
+            android:textAlignment="textStart"
+
+
+            android:textAllCaps="false"
+            android:textSize="24sp"
             android:textStyle="bold"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,65 +84,143 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="6dp"
+                android:paddingLeft="16dp"
                 android:paddingTop="10dp"
 
                 android:text="时间"
-                />
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/event_Date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
                 android:layout_weight="3"
                 android:text="date"
-                />
+                android:textSize="15sp"/>
 
-            <TextView
-                android:id="@+id/event_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="time"/>
 
         </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/event_placeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingLeft="6dp"
-            android:paddingTop="10dp"
-
-
-            android:text="地点"
-            android:textColor="@color/avoscloud_feedback_text_gray"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:id="@+id/event_place"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/event_placeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
 
 
-            android:paddingLeft="6dp"
-            android:paddingTop="10dp"
-            android:text="湖南省长沙市铁道学院"/>
+        android:text="地点"
+        android:textColor="@color/avoscloud_feedback_text_gray"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/event_place"
+
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:text="湖南省长沙市铁道学院"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
+</LinearLayout>
 
         <TextView
             android:id="@+id/event_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"/>
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:text="hhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+            android:textSize="15sp"/>
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingBottom="8dp"
             app:srcCompat="@drawable/add_image"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="8dp"
+                android:text="发布者"/>
+
+            <ImageView
+                android:id="@+id/event_post_user_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/textView3"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:clickable="true"
+                app:srcCompat="@drawable/check_circle_blank"/>
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="236dp"
+                android:layout_toRightOf="@+id/textView3"
+                android:paddingTop="8dp"
+                app:srcCompat="@drawable/person_attend"/>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/imageView6"
+                android:paddingLeft="4dp"
+                android:paddingTop="8dp"
+                android:text="3"
+                android:textSize="14sp"/>
+        </RelativeLayout>
+
+
+
+
+
 
 
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true">
+
+    <Button
+        android:id="@+id/attend_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+
+
+        android:background="@drawable/attend_color_selector"
+        android:text="参加活动"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"/>
+</LinearLayout>
+</RelativeLayout>

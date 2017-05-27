@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:mlns="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <LinearLayout
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:weightSum="1">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:text="主题"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/event_add_group_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+
+            mlns:srcCompat="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/event_add_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/event_add_group_image"
+            android:paddingBottom="18dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="28dp"
+            android:text="选择群组"
+            android:textSize="18sp"/>
+    </RelativeLayout>
 
     <EditText
         android:id="@+id/new_event_title"
@@ -26,6 +44,7 @@
         android:layout_height="wrap_content"
 
 
+        android:hint="输入你的标题"
         android:singleLine="true"/>
 
 
@@ -54,20 +73,19 @@
         android:textAlignment="center"
         android:textSize="18sp"/>
 
-    <EditText
-        android:id="@+id/event_add_place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/event_place_text"
-        android:layout_toRightOf="@+id/event_place_text"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:textAlignment="textStart"
-        android:textSize="18sp"/>
+        <EditText
+            android:id="@+id/event_add_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/event_place_text"
+            android:layout_toRightOf="@+id/event_place_text"
+            android:ems="10"
+            android:hint="选择地点"
+            android:inputType="textPersonName"
+            android:textSize="18sp"/>
 </RelativeLayout>
 
     <TextView
@@ -91,15 +109,26 @@
         android:layout_height="128dp"
         android:paddingLeft="10dp"
         mlns:srcCompat="@drawable/add_image"/>
+</LinearLayout>
+    </ScrollView>
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_gravity="bottom"
+
+
+
         android:text="发布"
-
-        android:textAlignment="center"/>
-
-
+        android:textAlignment="center"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="18sp"/>
 </LinearLayout>
-</ScrollView>
+
+
+</RelativeLayout>

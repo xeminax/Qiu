@@ -1,23 +1,16 @@
 package com.android.qiu.model;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.android.qiu.qiu.R;
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.GetDataCallback;
-import com.avos.avoscloud.ProgressCallback;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +23,7 @@ public class EventLab {
     private static EventLab sEventLab;
     private List<Event> mEvents;
     private Bitmap image;
+    private List<Event> events;
     public static EventLab get(Context context){
         if(sEventLab == null){
             sEventLab = new EventLab(context);
@@ -68,56 +62,30 @@ public class EventLab {
     }
 
     public List<Event> getEventsALLFromLean(){
-        final ArrayList<Event> events = new ArrayList<Event>();
-        AVQuery<AVObject> avQuery = new AVQuery<>("Activity");
+        events = new ArrayList<>();
+        //events = null;
+        events.clear();
+        AVQuery<Event> avQuery = AVObject.getQuery(Event.class);
         avQuery.orderByDescending("createdAt");
-        avQuery.findInBackground(new FindCallback<AVObject>() {
+        avQuery.findInBackground(new FindCallback<Event>() {
             @Override
-            public void done(List<AVObject> list, AVException e) {
+            public void done(List<Event> list, AVException e) {
                 if (e == null) {
-                    //int count = 1;
-                    for(AVObject activity :  list){
-                        //byte[] bytes = null;
-                        image = null;
-                        Event event = new Event();
-                        event.setTitle(activity.getString("title"));
-                        //++count;
-                        event.setPlace(activity.getString("location_string"));
-
-                        event.setContent(activity.getString("description"));
-                        //bytes =  activity.getAVFile("image").getData();
-                        AVFile avFile = activity.getAVFile("image");
-                        avFile.getDataInBackground(new GetDataCallback(){
-                            @Override
-                            public void done(byte[] bytes, AVException e) {
-                                // bytes 就是文件的数据流
-                                if(bytes.length!=0){
-                                    image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                }
-                                else{
-                                    image = null;
-                                }
-
-                            }
-                        }, new ProgressCallback() {
-                            @Override
-                            public void done(Integer integer) {
-                                // 下载进度数据，integer 介于 0 和 100。
-                            }
-                        });
-                        event.setPicture(image);
-
-                        events.add(event);
-                    }
+                    events.addAll(list);
+                    //System.out.println(list.size()+" find");
                 } else {
                     e.printStackTrace();
                 }
+                //System.out.println(events.size()+" find2");
             }
         });
+
+        //Log.d("test", String.valueOf(events.size()));
+        //System.out.println(events.size()+" EventLab");
         return events;
     }
 
-    public List<Event> getNearEvents (AVGeoPoint point){
+    /*public List<Event> getNearEvents (AVGeoPoint point){
         //final List<Event> events = new ArrayList<>();
         final List<Event> events = null;
         AVQuery<AVObject> query = new AVQuery<>("Activity");
@@ -161,7 +129,7 @@ public class EventLab {
         });
 
         return  events;
-    }
+    }*/
 
 
 }

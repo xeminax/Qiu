@@ -1,12 +1,12 @@
 package com.android.qiu.qiu;
 
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,10 +17,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.qiu.model.Event;
 import com.android.qiu.model.EventLab;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+
+import cn.leancloud.chatkit.LCChatKit;
+import cn.leancloud.chatkit.LCChatKitUser;
+import cn.leancloud.chatkit.activity.LCIMConversationActivity;
+import cn.leancloud.chatkit.utils.LCIMConstants;
 
 
 public class EventListActivity extends AppCompatActivity
@@ -29,7 +42,7 @@ public class EventListActivity extends AppCompatActivity
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private Button mloginButton;
-
+    private ImageView mMyprofile;
 
 
     @Override
@@ -38,19 +51,11 @@ public class EventListActivity extends AppCompatActivity
         setContentView(R.layout.activity_event_list);
 
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-
-
-
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-
-
-
 
 
         mViewPager = (ViewPager) findViewById(R.id.viewpage_container);
@@ -59,14 +64,13 @@ public class EventListActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Event event = new Event();
-                EventLab.get(EventListActivity.this).addEvent(event);
-                Intent intent = new Intent(EventListActivity.this,AddEventActivity.class);
+                /*Event event = new Event();
+                EventLab.get(EventListActivity.this).addEvent(event);*/
+                Intent intent = new Intent(EventListActivity.this, AddEventActivity.class);
                 startActivity(intent);
             }
         });
@@ -85,20 +89,27 @@ public class EventListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        mloginButton = (Button) headerView.findViewById(R.id.login) ;
-        mloginButton.setOnClickListener(new View.OnClickListener(){
+        mMyprofile = (ImageView) headerView.findViewById(R.id.userprofile);
+        mMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                Intent i = new Intent(EventListActivity.this,LoginActivity.class);
+            public void onClick(View view) {
+                Intent i = new Intent(EventListActivity.this, UserinfoActivity.class);
+                startActivity(i);
+            }
+        });
+        mloginButton = (Button) headerView.findViewById(R.id.login);
+        mloginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(EventListActivity.this, LoginActivity.class);
                 startActivity(i);
             }
         });
 
 
 
-
-
-
+        // 开启聊天服务
+        connectChatServe();
 
 
     }
@@ -144,7 +155,7 @@ public class EventListActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_item_discovery) {
-            Toast.makeText(this,"you clicked Add", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "you clicked Add", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -158,19 +169,40 @@ public class EventListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.menu_item_discovery) {
-            Intent i = new Intent(EventListActivity.this,GroupKindListActivity.class);
-
+            Intent i = new Intent(EventListActivity.this, GroupKindListActivity.class);
             startActivity(i);
 
 
+        } else if (id == R.id.menu_item_message) {
 
-        } else if (id == R.id.nav_manage) {
+            Intent i = new Intent(EventListActivity.this, ChatActivity.class);
+            startActivity(i);
 
-        } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.menu_item_mysubs) {
+            Intent i = new Intent(EventListActivity.this,MyFollowGroupActivity.class);
+            startActivity(i);
+
+        } else if (id == R.id.menu_item_mypost) {
+            Intent i = new Intent(EventListActivity.this,MyPostEventActivity.class);
+            startActivity(i);
+
+        } else if (id == R.id.logout) {
+            AVUser.getCurrentUser().logOut();
+            startActivity(new Intent(EventListActivity.this, LoginActivity.class));
+            EventListActivity.this.finish();
+        }
+        else if (id == R.id.menu_item_myattend) {
+            Intent i = new Intent(EventListActivity.this,MyAttendEventActivity.class);
+            startActivity(i);
 
         }
+        else if (id == R.id.setting) {
+            Intent i = new Intent(EventListActivity.this,SettingsActivity.class);
+            startActivity(i);
+
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -179,5 +211,33 @@ public class EventListActivity extends AppCompatActivity
     }
 
 
+    private void connectChatServe() {
+        /*String clientId = AVUser.getCurrentUser().getObjectId();
+        if (TextUtils.isEmpty(clientId)) {
+            return;
+        }*/
+        AVUser user = AVUser.getCurrentUser();
+        if (user == null) {
+            return;
+        }
+        String clientId = user.getObjectId();
 
+        if (TextUtils.isEmpty(clientId)) {
+            return;
+        }
+
+
+        LCChatKit.getInstance().open(clientId, new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+
+
+                if (null == e) {
+                    Toast.makeText(EventListActivity.this, "聊天服务启动成功！", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(EventListActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }

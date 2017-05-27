@@ -15,12 +15,13 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/userprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@android:drawable/sym_def_app_icon"/>
+        android:paddingTop="56dp"
+        app:srcCompat="@mipmap/ic_launcher"/>
 
     <Button
         style="@style/Widget.AppCompat.Button.Borderless"
@@ -29,12 +30,12 @@
         android:layout_width="wrap_content"
 
         android:layout_height="wrap_content"
+        android:text="登陆/注册"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_above="@+id/UserInfoUsername"
-        android:layout_alignEnd="@+id/textView2"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_marginEnd="23dp"
-        android:layout_marginRight="23dp"
-        android:text="登陆"/>
+        android:layout_toRightOf="@+id/userprofile"
+        android:layout_toEndOf="@+id/userprofile"/>
 
 
     <TextView
@@ -42,17 +43,11 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageView"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_below="@id/userprofile"
+        android:paddingTop="8dp"
         android:text="username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
-    <TextView
-        android:layout_below="@id/UserInfoUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="android.studio@android.com"
-        android:id="@+id/textView2"/>
 </RelativeLayout>
 
 </LinearLayout>

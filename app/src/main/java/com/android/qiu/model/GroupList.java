@@ -18,5 +18,14 @@ public class GroupList {
     public void setGroupKindName(String name) {
         mGroupKindName = name;
     }
+    public String getGroupKindName() {
+        return mGroupKindName;
+    }
+    public void setGroupName(String name){mGroupName = name;}
+    public String getGroupName(){return mGroupName;}
+    public UUID getGroupKindId(){return mId; }
+    public UUID getGroupId(){return mId;}
+
+
 
 }

@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
       mUsernameView.setError(getString(R.string.error_field_required));
       focusView = mUsernameView;
       cancel = true;
-    }
+  }
 
     if (cancel) {
       focusView.requestFocus();
@@ -112,7 +112,8 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, EventListActivity.class));
           } else {
             showProgress(false);
-            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "登录失败，用户名或密码错误！", Toast.LENGTH_SHORT).show();
           }
         }
       });

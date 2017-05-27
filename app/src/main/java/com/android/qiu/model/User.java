@@ -5,4 +5,5 @@ package com.android.qiu.model;
  */
 
 public class User {
+
 }
